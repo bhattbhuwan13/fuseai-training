@@ -31,7 +31,7 @@ We collect feedback from our customers. We want to convert the data we get from 
 #### Is there a system in place to do it right now (even if manual)? If so, how is it done right now? Is the process documented?  
 No, there is no such system right now.  
 
-## Even if not, How would an expert in the space approach this problem? What would be the variables/pieces of data that person would base a solution on?   
+#### Even if not, How would an expert in the space approach this problem? What would be the variables/pieces of data that person would base a solution on?   
 An expert would manually go through each of the customer feedback and find out the areas that need improvement. For example if many people complain about being biryani from the restaurant “Oye Amritsar” spicy then the expert would suggest the chef to use less spices. Contrary to this, if an expert finds that people love spicy biryani then the expert would suggest the chef to continue doing so.  
 
 
