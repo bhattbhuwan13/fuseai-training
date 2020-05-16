@@ -90,3 +90,8 @@ target/
 
 # unwanted notebooks
 notebooks/carads-tp-data_exploration.ipynb
+
+
+#models
+./models/
+/models/
