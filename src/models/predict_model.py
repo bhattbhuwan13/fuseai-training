@@ -71,7 +71,7 @@ def make_predictions(text):
 
 
 def main():
-    sentiment = make_predictions("I am very happy today. I am feeling great. My girl enjoyed my date.")
+    sentiment = make_predictions("I hate you bitch. You are the worst person")
     print(sentiment)
 
 if __name__ == '__main__':
