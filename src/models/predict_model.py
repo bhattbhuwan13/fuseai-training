@@ -22,6 +22,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 def get_artifacts():
     path_to_base_folder = os.path.realpath(__file__) 
@@ -56,14 +58,20 @@ def make_predictions(text):
     text = text_list
     vectorizer, label_encoder, tf_idf_transformer, model = get_artifacts()
 
-    features = vectorizer.transform(
+    count_vec = CountVectorizer(vocabulary=vectorizer.vocabulary_, analyzer='word', stop_words='english', ngram_range=(2, 2))
+
+    features = count_vec.fit_transform(
+
         text
     )
-
-    features = tf_idf_transformer.transform(features)
+    tf_idf_transformer = TfidfTransformer()
+    features = tf_idf_transformer.fit_transform(features)
     
     features_nd = features.toarray()
-    
+    print(features_nd)
+    features_nd = features_nd[0]
+    print(sum(features_nd))
+    features_nd = features_nd.reshape(-1, 1).T
     result = model.predict(features_nd)
 
     result = label_encoder.inverse_transform(result)
@@ -71,7 +79,7 @@ def make_predictions(text):
 
 
 def main():
-    sentiment = make_predictions("I hate you bitch. You are the worst person")
+    sentiment = make_predictions("I love you")
     print(sentiment)
 
 if __name__ == '__main__':
