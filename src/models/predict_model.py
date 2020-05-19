@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import sys
 import os
+import joblib
 import argparse
 
 full_absolute_location = os.path.realpath(__file__) 
@@ -39,14 +40,14 @@ def get_artifacts():
 
     vectorizer = pickle.load(vectorizer_file)
     label_encoder = pickle.load(label_encoder_file)
-    tf_idf_transformer = pickle.load(tf_idf_transformer_file)
-    model = pickle.load(model_file)
+    tf_idf_transformer = joblib.load(path_to_base_folder + '/models/tfidt_feature_vector.pkl')
+    model = joblib.load(path_to_base_folder + '/models/Naive_bayes_model.pkl')
     
     # Closing the files
     vectorizer_file.close()
     label_encoder_file.close()
-    tf_idf_transformer_file.close()
-    model_file.close()
+    #tf_idf_transformer_file.close()
+    #model_file.close()
 
     return vectorizer, label_encoder, tf_idf_transformer, model
 
@@ -58,28 +59,28 @@ def make_predictions(text):
     text = text_list
     vectorizer, label_encoder, tf_idf_transformer, model = get_artifacts()
 
-    count_vec = CountVectorizer(vocabulary=vectorizer.vocabulary_, analyzer='word', stop_words='english', ngram_range=(2, 2))
+    #count_vec = CountVectorizer(vocabulary=vectorizer.vocabulary_, analyzer='word', stop_words='english', ngram_range=(2, 2))
 
-    features = count_vec.fit_transform(
-
-        text
-    )
-    tf_idf_transformer = TfidfTransformer()
-    features = tf_idf_transformer.fit_transform(features)
+    #features = tf_idf_transformer.transform(
+    #
+    #    text
+    #)
+    #tf_idf_transformer = TfidfTransformer()
+    features = tf_idf_transformer.transform(text_list)
     
-    features_nd = features.toarray()
-    print(features_nd)
-    features_nd = features_nd[0]
-    print(sum(features_nd))
-    features_nd = features_nd.reshape(-1, 1).T
+    features_nd = features #features.toarray()
+    #print(features_nd)
+    #features_nd = features_nd[0]
+    #print(sum(features_nd))
+    #features_nd = features_nd.reshape(-1, 1).T
     result = model.predict(features_nd)
 
-    result = label_encoder.inverse_transform(result)
+    #result = label_encoder.inverse_transform(result)
     return result
 
 
 def main():
-    sentiment = make_predictions("I love you")
+    sentiment = make_predictions("I hate you. You are the worst person")
     print(sentiment)
 
 if __name__ == '__main__':
