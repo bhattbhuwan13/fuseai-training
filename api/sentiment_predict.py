@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import os
 import sys
 import argparse
-
+import time
 print(os.path.realpath(__file__))
 
 full_absolute_location = os.path.realpath(__file__) 
@@ -44,13 +44,17 @@ def predict_sentiment():
     if request.method == 'POST':
         # Form being submitted; grab data from form.
         text = request.args.get("text", '')
+        a = time.monotonic()
         print("printing the text {}".format(request.get_json(force=True)['text']))
         text = request.get_json(force=True)['text']
         sentiment = make_predictions(text)
         sentiment = sentiment[0]
+        b = time.monotonic()
+        time_elapsed = b-a
         
         response = {
-                    'sentiment':sentiment
+                    'sentiment':sentiment,
+                    'eta' : time_elapsed
                 }
         response = jsonify(response)
         return response
