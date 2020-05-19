@@ -47,14 +47,15 @@ def predict_sentiment():
         a = time.monotonic()
         print("printing the text {}".format(request.get_json(force=True)['text']))
         text = request.get_json(force=True)['text']
-        sentiment = make_predictions(text)
+        sentiment, probability = make_predictions(text)
         sentiment = sentiment[0]
         b = time.monotonic()
         time_elapsed = b-a
         
         response = {
                     'sentiment':sentiment,
-                    'eta' : time_elapsed
+                    'eta' : time_elapsed,
+                    'confidence': probability
                 }
         response = jsonify(response)
         return response

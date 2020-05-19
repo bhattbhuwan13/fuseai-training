@@ -74,9 +74,12 @@ def make_predictions(text):
     #print(sum(features_nd))
     #features_nd = features_nd.reshape(-1, 1).T
     result = model.predict(features_nd)
+    print("The probability is : {}".format(model.predict_proba(features_nd)))
+    prob = max(model.predict_proba(features_nd)[0])
+    print(prob)
 
     #result = label_encoder.inverse_transform(result)
-    return result
+    return result, prob
 
 
 def main():
