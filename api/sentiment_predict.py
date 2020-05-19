@@ -43,7 +43,9 @@ def find_sentiment():
 def predict_sentiment():
     if request.method == 'POST':
         # Form being submitted; grab data from form.
-        text = request.args.get('text', '')
+        text = request.args.get("text", '')
+        print("printing the text {}".format(request.get_json(force=True)['text']))
+        text = request.get_json(force=True)['text']
         sentiment = make_predictions(text)
         sentiment = sentiment[0]
         
@@ -52,3 +54,7 @@ def predict_sentiment():
                 }
         response = jsonify(response)
         return response
+
+
+if __name__ == '__main__':
+    app.run()
