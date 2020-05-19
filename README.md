@@ -1,6 +1,17 @@
 associate_training
 ==============================
 
+# HOW TO RUN
+---
+
+From the directory containing README
+
+1. install all dependencies from requirements.txt
+2. use EXPORT FLASK_APP=export FLASK_APP=sentiment_predict.py
+3. use flask run
+4. got to http://127.0.0.1:5000/get_sentiment to run the UI
+5. For running the api: Use the 'POST' request for uri http://127.0.0.1:5000/predict_sentiment, in the body use {"text": "your desired text"} to run the prediction
+
 a repo that contains my deliverables for all the task done during the training
 
 Project Organization
