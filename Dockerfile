@@ -1,6 +1,8 @@
-FROM python:3.6.1-alpine
+FROM tiangolo/uwsgi-nginx-flask:python3.6
 WORKDIR /project
 ADD . /project
-RUN apk add --no-cache cython3
 RUN pip install -r requirements.txt
-CMD ["python api/sentiment_predict.py"]
+RUN python nltk_downloader.py
+WORKDIR /project
+#CMD ["python"]
+CMD python api/sentiment_predict.py
