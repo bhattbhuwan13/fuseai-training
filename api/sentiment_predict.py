@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import time
+import json
 print(os.path.realpath(__file__))
 
 full_absolute_location = os.path.realpath(__file__) 
@@ -18,8 +19,13 @@ from flask_wtf import Form
 from wtforms import TextField
 from flask import jsonify
 
-app = Flask(__name__, template_folder="./templates")
+from bson.json_util import dumps
+from bson.json_util import loads
 
+from pymongo import MongoClient
+
+app = Flask(__name__, template_folder="./templates")
+MONGO_URL = "mongodb://127.0.0.1:27017"
 
 @app.route('/')
 def hello_world():
@@ -31,10 +37,25 @@ def find_sentiment():
     if request.method == 'POST':
         # Form being submitted; grab data from form.
         text = request.form['text']
-        print(text)
-        sentiment = make_predictions(text)
-        print(sentiment)
-        return render_template('submit_text.html', message = sentiment[0])
+        a = time.monotonic()
+        sentiment, probability = make_predictions(text)
+        sentiment = sentiment[0]
+        b = time.monotonic()
+        time_elapsed = b - a
+
+        database_item = {
+                    'query':text,
+                    'sentiment':sentiment,
+                    'eta' : time_elapsed,
+                    'confidence': probability
+                    }
+        # inserting to dtabase
+        client = MongoClient(MONGO_URL)
+        db=client['sentiments']
+        sentiments = db.sentiments
+        sentiments.insert_one(database_item)
+
+        return render_template('submit_text.html', message = sentiment)
 
     return render_template('submit_text.html')
 
@@ -58,7 +79,39 @@ def predict_sentiment():
                     'confidence': probability
                 }
         response = jsonify(response)
+
+        database_item = {
+                    'query':text,
+                    'sentiment':sentiment,
+                    'eta' : time_elapsed,
+                    'confidence': probability
+                    }
+        # inserting to dtabase
+        client = MongoClient(MONGO_URL)
+        db=client['sentiments']
+        sentiments = db.sentiments
+        sentiments.insert_one(database_item)
         return response
+
+
+@app.route('/get_all_items', methods=['GET'])
+def get_all_items():
+    if request.method == 'GET':
+        # Form being submitted; grab data from form.
+
+        # getting all request from database
+        client = MongoClient(MONGO_URL)
+        db=client['sentiments']
+        sentiments = db.sentiments
+        
+        items = []
+        for item in sentiments.find():
+            item.pop('_id')
+            items.append(item)
+
+
+        resp = jsonify(items)
+        return resp
 
 
 if __name__ == '__main__':
