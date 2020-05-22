@@ -6,7 +6,7 @@ associate_training
 
 From the directory containing README
 
-1. RUN docker-compose build followed by docker-compose up
+1. RUN **docker-compose build** followed by **docker-compose up**
 2. In your browser, got to http://127.0.0.1:5000/get_sentiment to run the UI
 3. For running the api: 
     * **TO GET SENTIMENTS FOR YOUR TEXT**
