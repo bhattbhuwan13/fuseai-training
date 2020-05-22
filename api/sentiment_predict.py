@@ -25,7 +25,12 @@ from bson.json_util import loads
 from pymongo import MongoClient
 
 app = Flask(__name__, template_folder="./templates")
-MONGO_URL = "mongodb://127.0.0.1:27017"
+#MONGO_URL = "mongodb://127.0.0.1:27017"
+#MONGO_URL = 'mongodb://' + str(host.docker.internal) + ':27017'
+IP_ADDR = '192.168.1.67'
+MONGO_URL = 'mongodb://' + IP_ADDR + ':27017'
+print("Ip address for mongo is {}".format(MONGO_URL))
+
 
 @app.route('/')
 def hello_world():
@@ -50,7 +55,8 @@ def find_sentiment():
                     'confidence': probability
                     }
         # inserting to dtabase
-        client = MongoClient(MONGO_URL)
+        #client = MongoClient(MONGO_URL)
+        client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
         db=client['sentiments']
         sentiments = db.sentiments
         sentiments.insert_one(database_item)
@@ -87,7 +93,8 @@ def predict_sentiment():
                     'confidence': probability
                     }
         # inserting to dtabase
-        client = MongoClient(MONGO_URL)
+        #client = MongoClient(MONGO_URL)
+        client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
         db=client['sentiments']
         sentiments = db.sentiments
         sentiments.insert_one(database_item)
@@ -100,7 +107,8 @@ def get_all_items():
         # Form being submitted; grab data from form.
 
         # getting all request from database
-        client = MongoClient(MONGO_URL)
+        #client = MongoClient(MONGO_URL)
+        client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
         db=client['sentiments']
         sentiments = db.sentiments
         
@@ -116,3 +124,4 @@ def get_all_items():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+    #app.run()

@@ -6,11 +6,13 @@ associate_training
 
 From the directory containing README
 
-1. install all dependencies from requirements.txt
-2. use export FLASK_APP=api/sentiment_predict.py
-3. use flask run
-4. got to http://127.0.0.1:5000/get_sentiment to run the UI
-5. For running the api: Use the 'POST' request for uri http://127.0.0.1:5000/predict_sentiment, in the body use {"text": "your desired text"} to run the prediction
+1. RUN docker-compose build followed by docker-compose up
+2. In your browser, got to http://127.0.0.1:5000/get_sentiment to run the UI
+3. For running the api: 
+    * **TO GET SENTIMENTS FOR YOUR TEXT**
+      Use the 'POST' request for uri http://127.0.0.1:5000/predict_sentiment, in the body use {"text": "your desired text"} to run the prediction
+    * **TO VIEW ALL REQUESTS SENT TO API**
+      Use the 'GET' request for uri http://127.0.0.1:5000/get_all_items: the body should be empty
 
 a repo that contains my deliverables for all the task done during the training
 
